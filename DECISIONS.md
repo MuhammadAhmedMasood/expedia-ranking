@@ -22,3 +22,12 @@ click_bool, booking_bool, gross_bookings_usd: these are the outcome. gross_booki
 position: it’s Expedia’s own ranker’s output, and it only exists after ranking. In production, your model runs before positions exist. Including it would mean learning to copy Expedia’s ranking, plus position bias.
 random_bool: describes how the page was displayed, not anything about the user or hotel. It’s used only to build the unbiased test slice.
 IDs (srch_id, prop_id, srch_destination_id): arbitrary numbers. Feeding them in as numbers makes the model treat “hotel 140,000” as bigger than “hotel 5”, which is meaningless, and it tends to memorise individual hotels instead of learning patterns. srch_id is still used to group rows into searches, and date_time is used for the time split.
+
+## Feature Engineering:
+Features: relative to the search. Users compare hotels within one result list, so I added within-search features using window functions: price percentile, price vs search median, and star/review/location vs search mean. Alternative: raw features only. I’ll compare both, to measure the gain.
+
+Competitors: 24 sparse columns (52–98% NULL) summarised into 3 counts (cheaper / dearer / known), which cuts noise.
+
+Price: log transform for outliers; per-night price because price_usd conventions differ by site; median rather than mean because it’s robust to outliers.
+
+Not done (deliberately): hotel historical click/booking rates (“target encoding”). They’re very predictive, but if you compute them on the same data you evaluate on, they leak the answer. Doing it properly needs a time-based calculation using only past data. Listed as a next step.
