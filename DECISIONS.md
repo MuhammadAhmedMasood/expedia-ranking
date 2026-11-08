@@ -40,3 +40,10 @@ Metric: NDCG@5 with gain 2^rel − 1 (matches LambdaRank), with searches without
 
 Baselines: random, cheapest-first, best-reviewed, best-location. Expedia’s own ranking is shown as a reference only, since it’s inflated by position bias on non-random traffic.
 
+## models:
+
+Models compared: logistic regression (linear, pointwise) → LightGBM classifier (nonlinear, pointwise) → LightGBM LambdaRank (listwise, optimises NDCG directly). Same features and test set for all, so differences come from the model.
+
+Early stopping on the validation set chooses the number of trees, so the test set is never used for tuning.
+
+Hyperparameters: sensible defaults with regularisation (min leaf size, feature subsampling). Not heavily tuned: the gain from tuning is usually small compared with features, and it wasn’t a priority in a short project.
