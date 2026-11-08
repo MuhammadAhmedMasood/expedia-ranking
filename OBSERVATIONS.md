@@ -10,3 +10,7 @@ Dips at 5, 11, 17, 23 (every 6 positions) appear in both lines, so they’re not
 Sample is representative: label distribution matches the full 9.9M rows.
 
 Search 25 has 33 hotels. price_pct_rank climbs in steps of 1/32 = 0.03125 from the cheapest (0.0). price_vs_median of 0.51 means the cheapest hotel is about half the median price (about $53). And look at the booked hotel (relevance 5): $42, cheaper than the median (0.79), with stars above the search average (+1.09). Cheap and good is exactly the pattern the model should learn.
+
+Location is the single strongest signal, ahead of price and reviews. Users care most about where the hotel is.
+No single feature is enough, which is the case for a model that combines them.
+Target: beat 0.278 clearly, and ideally get close to Expedia’s 0.378.

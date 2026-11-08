@@ -31,3 +31,12 @@ Competitors: 24 sparse columns (52–98% NULL) summarised into 3 counts (cheaper
 Price: log transform for outliers; per-night price because price_usd conventions differ by site; median rather than mean because it’s robust to outliers.
 
 Not done (deliberately): hotel historical click/booking rates (“target encoding”). They’re very predictive, but if you compute them on the same data you evaluate on, they leak the answer. Doing it properly needs a time-based calculation using only past data. Listed as a next step.
+
+## Splitting data into training, validation and testing
+
+Split: by time (70/10/20 of searches by date), not random. In production we train on the past and predict the future, and a random split would leak future patterns (seasonality, price trends) into training. The validation set is for early stopping in Step 6. The test set is untouched until final evaluation.
+
+Metric: NDCG@5 with gain 2^rel − 1 (matches LambdaRank), with searches without any click excluded. Top-5 because users rarely scroll, and accuracy is useless at 97% zeros.
+
+Baselines: random, cheapest-first, best-reviewed, best-location. Expedia’s own ranking is shown as a reference only, since it’s inflated by position bias on non-random traffic.
+
